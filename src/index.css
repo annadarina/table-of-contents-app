@@ -1,0 +1,33 @@
+@import "shared/styles/reset.css";
+@import "shared/styles/variables.css";
+
+html, body, #root {
+    height: 100%;
+    background-color: var(--color-background);
+}
+
+body {
+    font-family: sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    cursor: default;
+}
+
+div, p, h1, h2, h3, h4, h5, h6, section, main, article, aside, button, input {
+    box-sizing: border-box;
+}
+
+:root {
+    height: 100%;
+    font-family: sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}

@@ -1,0 +1,5 @@
+.content__title {
+    color: var(--black);
+    font-size: 43px;
+    font-weight: bold;
+}

@@ -1,0 +1,11 @@
+.loading-placeholder {
+    padding: 0 32px;
+}
+
+.loading-placeholder__skeleton:not(:last-child) {
+    margin-bottom: 16px;
+}
+
+.loading-placeholder__skeleton--child {
+    margin-left: auto;
+}

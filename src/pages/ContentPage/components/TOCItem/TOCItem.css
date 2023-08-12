@@ -1,0 +1,46 @@
+.toc-item {
+    box-sizing: content-box;
+    cursor: pointer;
+}
+
+.toc-item--active {
+    background-color: var(--color-primary);
+    color: var(--white);
+}
+
+.toc-item--active {
+    background-color: var(--color-primary);
+    color: var(--white);
+}
+
+.toc-item__wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.toc-item__arrow-wrapper {
+    margin-right: 4px;
+    width: 16px;
+    height: 16px;
+}
+
+.toc-item__arrow--expand {
+    transition: transform 0.2s ease-in;
+    transform: rotate(90deg);
+}
+
+.toc-item__name {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px 8px 0;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--color-text-main);
+    text-decoration: none;
+}
+
+.toc-item--active .toc-item__name {
+    background-color: var(--color-primary);
+    color: var(--white);
+}
