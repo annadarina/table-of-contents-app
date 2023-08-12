@@ -3,22 +3,6 @@
     cursor: pointer;
 }
 
-.toc-item--active {
-    background-color: var(--color-primary);
-    color: var(--white);
-}
-
-.toc-item--active {
-    background-color: var(--color-primary);
-    color: var(--white);
-}
-
-.toc-item__wrapper {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
 .toc-item__arrow-wrapper {
     margin-right: 4px;
     width: 16px;
@@ -37,10 +21,27 @@
     font-size: 13px;
     line-height: 20px;
     color: var(--color-text-main);
+    transition: background-color 0.2s ease-in;
     text-decoration: none;
 }
 
-.toc-item--active .toc-item__name {
+.toc-item__name:not(.toc-item__name--active):hover {
+    background-color: var(--color-background-light-grey);
+}
+
+.toc-item__name--active {
     background-color: var(--color-primary);
     color: var(--white);
+}
+
+.toc-item__name--backlight:not(.toc-item__name--active) {
+    background-color: var(--color-backlight-active);
+}
+
+.toc-item__name--backlight-pale:not(.toc-item__name--active) {
+    background-color: var(--color-background-light-grey);
+}
+
+.toc-item__name--backlight:not(.toc-item__name--active) {
+    background-color: var(--color-backlight-active);
 }

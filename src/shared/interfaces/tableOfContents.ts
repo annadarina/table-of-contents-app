@@ -15,4 +15,6 @@ export interface PageData {
   url: string;
   tabIndex: number;
   anchor?: string;
+
+  ancestorIds?: string[];
 }

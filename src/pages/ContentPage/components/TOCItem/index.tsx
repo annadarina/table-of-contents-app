@@ -12,6 +12,8 @@ interface Props {
   setExpandedItems: React.Dispatch<
     React.SetStateAction<Record<PageData["id"], boolean>>
   >;
+  isDescendants: boolean;
+  isHighlighted: boolean;
 }
 
 const TOCItem = ({
@@ -20,6 +22,8 @@ const TOCItem = ({
   setActivePage,
   expandedItems,
   setExpandedItems,
+  isDescendants,
+  isHighlighted,
 }: Props) => {
   const hasChildren = item.pages && item.pages.length > 0;
 
@@ -27,20 +31,23 @@ const TOCItem = ({
     expandedItems[item.id] ? "toc-item__arrow--expand" : ""
   }`;
 
-  const tocItemClasses = `toc-item ${
-    activePage?.id === item.id ? "toc-item--active" : ""
-  }`;
+  const isActive = activePage?.id === item.id ? "toc-item__name--active" : "";
+  const isDescendantsClass = isDescendants
+    ? "toc-item__name--backlight-pale"
+    : "";
+  const isHighlightedClass = isHighlighted ? "toc-item__name--backlight" : "";
+  const tocNameClasses = `toc-item__name ${isActive} ${isDescendantsClass} ${isHighlightedClass}`;
 
   const onClick = useCallback(
-    (e: React.MouseEvent) => {
+    (event: React.MouseEvent) => {
       setActivePage(item);
 
       if (!hasChildren) {
         return;
       }
 
-      if (item.url === undefined) {
-        e.preventDefault();
+      if (!item.url) {
+        event.preventDefault();
       }
 
       setExpandedItems((prevMap) => ({
@@ -52,21 +59,19 @@ const TOCItem = ({
   );
 
   return (
-    <>
-      <li className={tocItemClasses}>
-        <NavLink
-          to={`${item.url}`}
-          style={{ paddingLeft: `${(item.level + 1) * 16}px` }}
-          className="toc-item__name"
-          onClick={onClick}
-        >
-          <span className="toc-item__arrow-wrapper">
-            {hasChildren && <ArrowDown className={arrowClasses} />}
-          </span>
-          {item.title}
-        </NavLink>
-      </li>
-    </>
+    <li>
+      <NavLink
+        to={`${item.url}`}
+        style={{ paddingLeft: `${(item.level + 1) * 16}px` }}
+        className={tocNameClasses}
+        onClick={onClick}
+      >
+        <span className="toc-item__arrow-wrapper">
+          {hasChildren && <ArrowDown className={arrowClasses} />}
+        </span>
+        {item.title}
+      </NavLink>
+    </li>
   );
 };
 

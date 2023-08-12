@@ -1,9 +1,10 @@
 import { useMemo, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import "./TableOfContents.css";
 import { TOCData, PageData } from "shared/interfaces/tableOfContents.ts";
-import TextField from "shared/components/TextField";
-import { flattenData } from "shared/utils";
+import {
+  flattenData,
+  getAllDescendantsOfTopLevel,
+  getHighlightedItems,
+} from "shared/utils";
 import TOCItem from "../TOCItem";
 
 interface Props {
@@ -11,9 +12,10 @@ interface Props {
 }
 
 const TableOfContents = ({ data }: Props) => {
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const { pageId } = useParams();
+  const [activePage, setActivePage] = useState<PageData | null>(null);
+  const [expandedItems, setExpandedItems] = useState<
+    Record<PageData["id"], boolean>
+  >({});
 
   const flattenedData = useMemo(() => {
     if (data) {
@@ -22,15 +24,21 @@ const TableOfContents = ({ data }: Props) => {
     return [];
   }, [data]);
 
-  const [activePage, setActivePage] = useState<PageData | null>(() => {
-    return (
-      flattenedData.find((element: PageData) => element.url === pageId) || null
-    );
-  });
+  const descendantsIds = useMemo(() => {
+    if (activePage) {
+      return getAllDescendantsOfTopLevel(flattenedData, activePage);
+    }
 
-  const [expandedItems, setExpandedItems] = useState<
-    Record<PageData["id"], boolean>
-  >({});
+    return [];
+  }, [activePage, flattenedData]);
+
+  const backlightIds = useMemo(() => {
+    if (activePage && activePage.level !== 0) {
+      return getHighlightedItems(flattenedData, activePage);
+    }
+
+    return [];
+  }, [activePage, flattenedData]);
 
   const areParentsExpanded = useCallback(
     (item: PageData) => {
@@ -54,37 +62,25 @@ const TableOfContents = ({ data }: Props) => {
     [flattenedData, expandedItems],
   );
 
-  // console.log("flattenedData", flattenedData);
-
-  console.log(expandedItems);
-
   return (
-    <>
-      <div className="nav__search">
-        <TextField
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e: any) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      <nav className="nav__toc">
-        <ul>
-          {flattenedData
-            .filter((item) => areParentsExpanded(item))
-            .map((item) => (
-              <TOCItem
-                key={item.id}
-                item={item}
-                activePage={activePage}
-                setActivePage={setActivePage}
-                expandedItems={expandedItems}
-                setExpandedItems={setExpandedItems}
-              />
-            ))}
-        </ul>
-      </nav>
-    </>
+    <nav className="nav__toc">
+      <ul>
+        {flattenedData
+          .filter((item) => areParentsExpanded(item))
+          .map((item) => (
+            <TOCItem
+              key={item.id}
+              item={item}
+              activePage={activePage}
+              setActivePage={setActivePage}
+              expandedItems={expandedItems}
+              setExpandedItems={setExpandedItems}
+              isDescendants={descendantsIds.includes(item.id)}
+              isHighlighted={backlightIds.includes(item.id)}
+            />
+          ))}
+      </ul>
+    </nav>
   );
 };
 
