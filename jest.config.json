@@ -1,0 +1,20 @@
+{
+  "testMatch": [
+    "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+  ],
+  "clearMocks": true,
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "jsx",
+    "ts",
+    "tsx"
+  ],
+  "setupFilesAfterEnv": [
+    "<rootDir>/src/setupTests.ts"
+  ],
+  "testEnvironment": "jsdom",
+  "moduleNameMapper": {
+    "\\.(css)$": "identity-obj-proxy"
+  }
+}

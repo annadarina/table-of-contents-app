@@ -1,4 +1,5 @@
-import { SVGProps } from "react";
+// @ts-ignore
+import React, { SVGProps } from "react";
 
 export const ArrowDown = (props: SVGProps<SVGSVGElement>) => {
   return (

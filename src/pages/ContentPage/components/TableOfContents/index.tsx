@@ -1,3 +1,5 @@
+// @ts-ignore
+import React from "react";
 import { useCallback } from "react";
 import { PageData } from "../../../../shared/interfaces/tableOfContents.ts";
 import TOCItem from "../TOCItem";
