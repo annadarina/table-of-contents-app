@@ -1,7 +1,7 @@
-import { useFetchTocData } from "shared/hooks";
+import { useFetchTocData } from "../../../../shared/hooks";
 import LoadingPlaceholder from "../LoadingPlaceholder";
 import TableOfContents from "../TableOfContents";
-import { TableOfContentsProvider } from "shared/context/TableOfContentsProvider";
+import { TableOfContentsProvider } from "../../../../shared/context/TableOfContentsProvider";
 
 const Sidebar = () => {
   const { isLoading, error, tocData } = useFetchTocData();

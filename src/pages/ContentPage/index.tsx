@@ -1,5 +1,5 @@
 import ContentDetails from "./components/ContentDetails";
-import Layout from "shared/components/Layout";
+import Layout from "../../shared/components/Layout";
 import Sidebar from "./components/Sidebar";
 
 const ContentPage = () => {

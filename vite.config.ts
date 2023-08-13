@@ -5,9 +5,4 @@ import express from "./express-plugin";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), express("src/server")],
-  resolve: {
-    alias: {
-      shared: "/src/shared",
-    },
-  },
 });

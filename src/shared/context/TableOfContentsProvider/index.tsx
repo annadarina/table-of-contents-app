@@ -1,10 +1,10 @@
 import React, { useContext, useState, useMemo, createContext } from "react";
-import { PageData, TOCData } from "~/shared/interfaces/tableOfContents.ts";
+import { PageData, TOCData } from "../../interfaces/tableOfContents.ts";
 import {
   flattenData,
   getAllDescendantsOfTopLevel,
   getHighlightedItems,
-} from "shared/utils";
+} from "../../utils";
 
 export interface TableOfContentsContext {
   data: TOCData | null;

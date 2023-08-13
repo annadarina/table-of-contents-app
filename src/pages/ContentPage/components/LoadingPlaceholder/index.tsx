@@ -1,5 +1,5 @@
 import "./LoadingPlaceholder.css";
-import Skeleton from "shared/components/Skeleton";
+import Skeleton from "../../../../shared/components/Skeleton";
 
 const skeletons = Array.from(Array(10).keys());
 

@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import "./TOCItem.css";
-import { PageData } from "shared/interfaces/tableOfContents.ts";
-import { ArrowDown } from "shared/icons/ArrowDown.tsx";
-import { useTableOfContentsContext } from "shared/context/TableOfContentsProvider";
+import { PageData } from "../../../../shared/interfaces/tableOfContents.ts";
+import { ArrowDown } from "../../../../shared/icons/ArrowDown.tsx";
+import { useTableOfContentsContext } from "../../../../shared/context/TableOfContentsProvider";
 
 interface Props {
   item: PageData;

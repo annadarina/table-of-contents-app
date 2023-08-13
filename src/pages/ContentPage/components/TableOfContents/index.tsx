@@ -1,7 +1,7 @@
 import { useCallback } from "react";
-import { PageData } from "shared/interfaces/tableOfContents.ts";
+import { PageData } from "../../../../shared/interfaces/tableOfContents.ts";
 import TOCItem from "../TOCItem";
-import { useTableOfContentsContext } from "shared/context/TableOfContentsProvider";
+import { useTableOfContentsContext } from "../../../../shared/context/TableOfContentsProvider";
 
 const TableOfContents = () => {
   const { flattenedData, expandedItems } = useTableOfContentsContext();
