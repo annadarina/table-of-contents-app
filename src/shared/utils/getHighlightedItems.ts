@@ -1,4 +1,5 @@
 import { PageData } from "../interfaces/tableOfContents.ts";
+import { findDescendants } from "./getAllDescendantsOfTopLevel.ts";
 
 /**
  * Filters descendants of a selected item.
@@ -14,17 +15,8 @@ const filterDescendants = (data: PageData[], selectedItemId: string) => {
   }
 
   const descendants = [];
+  findDescendants(data, selectedItemId, descendants);
 
-  const findDescendants = (nodeId: string) => {
-    data
-      .filter((item) => item.parentId === nodeId)
-      .forEach((child) => {
-        descendants.push(child);
-        findDescendants(child.id);
-      });
-  };
-
-  findDescendants(selectedItemId);
   return [selectedNode, ...descendants];
 };
 

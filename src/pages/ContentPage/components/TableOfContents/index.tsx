@@ -1,12 +1,20 @@
 // @ts-ignore
 import React, { useCallback } from "react";
+import "./TableOfContents.css";
 import { PageData } from "../../../../shared/interfaces/tableOfContents.ts";
 import TOCItem from "../TOCItem";
 import { useTableOfContentsContext } from "../../../../shared/context/TableOfContentsProvider";
+import TextField from "../../../../shared/components/TextField";
 
 const TableOfContents = () => {
-  const { flattenedData, expandedItems, setExpandedItems } =
-    useTableOfContentsContext();
+  const {
+    flattenedData,
+    expandedItems,
+    setExpandedItems,
+    inputValue,
+    setInputValue,
+    filteredIds,
+  } = useTableOfContentsContext();
 
   const handleOnToggleExpand = useCallback(
     (item: PageData) => {
@@ -32,11 +40,22 @@ const TableOfContents = () => {
     [flattenedData, setExpandedItems],
   );
 
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+  };
+
   return (
     <nav className="nav__toc">
+      <div className="nav__searchbar">
+        <TextField
+          className="nav__searchbar"
+          value={inputValue}
+          onChange={handleOnChange}
+        />
+      </div>
       <ul>
         {flattenedData
-          .filter((item) => expandedItems[item.id])
+          .filter((item) => filteredIds[item.id] && expandedItems[item.id])
           .map((item) => (
             <TOCItem
               key={item.id}

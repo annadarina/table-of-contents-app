@@ -1,63 +1,14 @@
 import { PageData } from "../interfaces/tableOfContents.ts";
 
 /**
- * Find descendants of a selected item in the list.
- * @param {PageData[]} data - The array of items.
- * @param {string} selectedItemId - The ID of the selected item.
- * @returns {PageData[]} - An array of descendant items.
- */
-export const findDescendants = (data: PageData[], selectedItemId: string) => {
-  const result = [];
-
-  const findChildren = (parentId: string) => {
-    const children = data.filter((item) => item.parentId === parentId);
-    for (const child of children) {
-      const { id, title, url, parentId, level, tabIndex, pages } = child;
-      const descendant = {
-        id,
-        title,
-        url,
-        parentId,
-        level,
-        tabIndex,
-        pages: pages ? [...pages] : [],
-        ancestorIds: [...(child.ancestorIds as string[]), parentId],
-      };
-      result.push(descendant);
-      findChildren(id);
-    }
-  };
-
-  const selectedItem = data.find((item) => item.id === selectedItemId);
-  if (selectedItem) {
-    const { id, title, url, parentId, level, tabIndex, pages } = selectedItem;
-    const selectedDescendant = {
-      id,
-      title,
-      url,
-      parentId,
-      level,
-      tabIndex,
-      pages: pages ? [...pages] : [],
-      ancestorIds: [...(selectedItem.ancestorIds as string[])],
-    };
-    result.push(selectedDescendant);
-    findChildren(selectedItemId);
-  }
-
-  return result;
-};
-
-/**
  * Find the top-level ancestor of a selected item in the list.
  * @param {PageData[]} data - The array of items.
  * @param {PageData} selectedItem - The selected item.
  * @returns {PageData | null} - The top-level ancestor item.
  */
 const findTopLevelAncestor = (data: PageData[], selectedItem: PageData) => {
-  // @ts-ignore
   const findAncestor = (item: PageData) => {
-    if (item.ancestorIds?.length === 0 && item.level === 0) {
+    if (item.level === 0) {
       return item;
     }
 
@@ -74,6 +25,25 @@ const findTopLevelAncestor = (data: PageData[], selectedItem: PageData) => {
 };
 
 /**
+ * Find descendants of a given node.
+ * @param {PageData[]} data - The array of items.
+ * @param {string} id - The ID of the item for which to find descendants.
+ * @param {PageData[]} descendants - An optional array to store descendants.
+ */
+export const findDescendants = (
+  data: PageData[],
+  id: string,
+  descendants: PageData[] = [],
+) => {
+  data
+    .filter((item) => item.parentId === id)
+    .forEach((child) => {
+      descendants.push(child);
+      findDescendants(data, child.id, descendants);
+    });
+};
+
+/**
  * Get all descendants of the top-level ancestor of a selected item in the list.
  * @param {PageData[]} data - The array of items.
  * @param {PageData} selectedItem - The selected item.
@@ -86,6 +56,9 @@ export const getAllDescendantsOfTopLevel = (
   // find the top level ancestor of the selected item
   const topLevelItem = findTopLevelAncestor(data, selectedItem);
   // return all the descendants of this top level item
-  const descendants = findDescendants(data, topLevelItem?.id as string);
+  let descendants = [];
+  findDescendants(data, topLevelItem.id, descendants);
+  descendants = [selectedItem, ...descendants];
+
   return [topLevelItem, ...descendants].map((item) => item?.id);
 };

@@ -9,12 +9,7 @@ export const flattenData = (data: TOCData) => {
   const flattenedData: PageData[] = [];
 
   const flattenItem = (item: PageData, ancestors: string[] = []) => {
-    const itemWithAncestors = {
-      ...item,
-      ancestorIds: ancestors,
-    };
-
-    flattenedData.push(itemWithAncestors);
+    flattenedData.push(item);
 
     if ("pages" in item) {
       item.pages.forEach((childId: string) => {
