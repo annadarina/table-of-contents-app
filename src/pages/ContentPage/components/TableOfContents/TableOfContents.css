@@ -1,4 +1,15 @@
+.nav__toc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .nav__searchbar {
     padding: 0 22px;
     margin-bottom: 16px;
+}
+
+.nav__list {
+    flex: 1;
+    overflow-y: auto;
 }

@@ -55,7 +55,7 @@ const TableOfContents = () => {
           onChange={handleOnChange}
         />
       </div>
-      <ul>
+      <ul className="nav__list">
         {flattenedData
           .filter((item) => filteredIds[item.id] && expandedItems[item.id])
           .map((item) => (
