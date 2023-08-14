@@ -10,5 +10,9 @@
 
     --white: #ffffff;
     --black: #000000;
+
+    --color-info: #307FFF;
+    --color-warning: #f3c033;
+    --color-error: #f45c4a;
 }
 

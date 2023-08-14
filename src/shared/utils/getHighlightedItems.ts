@@ -1,42 +1,50 @@
-import { PageData } from "shared/interfaces/tableOfContents.ts";
+import { PageData } from "../interfaces/tableOfContents.ts";
 
-const findDescendantsAndSiblings = (itemArray: PageData[], itemId: string) => {
-  const descendants: PageData[] = [];
+/**
+ * Filters descendants of a selected item.
+ * @param {PageData[]} data - The array of items.
+ * @param {string} selectedItemId - The selected item.
+ * @returns {PageData[]} An array of filtered data that has only descendants of selected parent item.
+ */
+const filterDescendants = (data: PageData[], selectedItemId: string) => {
+  const selectedNode = data.find((item) => item.id === selectedItemId);
 
-  const searchDescendants = (items: PageData[]) => {
-    for (const item of items) {
-      if (item.parentId === itemId) {
-        descendants.push(item);
-        searchDescendants(
-          itemArray.filter((child) => child.parentId === item.id),
-        );
-      }
-    }
-  };
-
-  searchDescendants(itemArray.filter((item) => item.parentId === itemId));
-
-  if (descendants.length === 0) {
-    const selectedItem = itemArray.find((item) => item.id === itemId);
-    if (selectedItem) {
-      const parentItem = itemArray.find(
-        (item) => item.id === selectedItem.parentId,
-      );
-      if (parentItem) {
-        return itemArray.filter(
-          (item) => item.level !== 1 && item.parentId === parentItem.id,
-        );
-      }
-    }
+  if (!selectedNode || selectedNode.level === 0) {
+    return [];
   }
 
-  return descendants;
+  const descendants = [];
+
+  const findDescendants = (nodeId: string) => {
+    data
+      .filter((item) => item.parentId === nodeId)
+      .forEach((child) => {
+        descendants.push(child);
+        findDescendants(child.id);
+      });
+  };
+
+  findDescendants(selectedItemId);
+  return [selectedNode, ...descendants];
 };
 
+/**
+ * Gets highlighted items based on the selected item.
+ * @param {PageData[]} data - The array of items.
+ * @param {PageData} selectedItem - The selected item.
+ * @param {string[]} topLevelIds - An array of top-level IDs to exclude from highlighting.
+ * @returns {PageData[]} An array of items' IDs that need to be highlighted.
+ */
 export const getHighlightedItems = (
   data: PageData[],
   selectedItem: PageData,
+  topLevelIds: string[],
 ) => {
-  const descendants = findDescendantsAndSiblings(data, selectedItem.id);
-  return descendants.map((item) => item?.id);
+  // do not highlight if selected item is on the top level
+  if (topLevelIds?.includes(selectedItem.id)) {
+    return [];
+  }
+
+  const filteredData = filterDescendants(data, selectedItem.parentId);
+  return filteredData.map((item) => item.id);
 };

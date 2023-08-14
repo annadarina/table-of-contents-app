@@ -1,6 +1,10 @@
-import { TOCData, PageData } from "shared/interfaces/tableOfContents.ts";
+import { TOCData, PageData } from "../interfaces/tableOfContents.ts";
 
-// Get flat list from the initial TOC data
+/**
+ * Get flat list from the initial TOC data.
+ * @param {TOCData} data - The initial data.
+ * @returns {PageData[]} - An array of all possible pages.
+ */
 export const flattenData = (data: TOCData) => {
   const flattenedData: PageData[] = [];
 

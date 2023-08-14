@@ -60,12 +60,12 @@ export const TableOfContentsProvider = ({
   // Get all item ids of the top level element
   // to highlight second-level topic's items
   const backlightIds = useMemo(() => {
-    if (activePage && activePage.level !== 0) {
-      return getHighlightedItems(flattenedData, activePage);
+    if (data && activePage && activePage.level !== 0) {
+      return getHighlightedItems(flattenedData, activePage, data.topLevelIds);
     }
 
     return [];
-  }, [activePage, flattenedData]);
+  }, [data, activePage, flattenedData]);
 
   return (
     <TableOfContentsContext.Provider

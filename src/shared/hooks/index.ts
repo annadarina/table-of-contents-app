@@ -1,1 +1,1 @@
-export * from "./useFetchTocData.ts";
+export * from "./useFetchTOCData.ts";

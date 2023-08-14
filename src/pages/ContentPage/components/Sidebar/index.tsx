@@ -1,19 +1,35 @@
-import { useFetchTocData } from "../../../../shared/hooks";
+import { useFetchTOCData } from "../../../../shared/hooks";
 import LoadingPlaceholder from "../LoadingPlaceholder";
 import TableOfContents from "../TableOfContents";
 import { TableOfContentsProvider } from "../../../../shared/context/TableOfContentsProvider";
+import Placeholder from "../../../../shared/components/Placeholder";
 
 const Sidebar = () => {
-  const { isLoading, error, tocData } = useFetchTocData();
+  const { isLoading, error, tocData } = useFetchTOCData();
+
+  // Show loading placeholder when data is loading
+  if (isLoading) {
+    return <LoadingPlaceholder />;
+  }
+
+  // Show error placeholder for the error state
+  if (error) {
+    return (
+      <Placeholder
+        status="error"
+        message="Error occured. Please try again later"
+      />
+    );
+  }
 
   return (
     <>
-      {isLoading ? (
-        <LoadingPlaceholder />
-      ) : (
+      {tocData && tocData.topLevelIds.length ? (
         <TableOfContentsProvider data={tocData}>
           <TableOfContents />
         </TableOfContentsProvider>
+      ) : (
+        <Placeholder message="No Data Found" />
       )}
     </>
   );

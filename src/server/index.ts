@@ -3,8 +3,6 @@ import axios from "axios";
 
 export const app = express();
 
-app.get("/api/test", (_, res) => res.json({ greeting: "Hello" }));
-
 app.get("/api/table-of-contents", async (_, res) => {
   const url = "https://www.jetbrains.com/help/idea/2023.1/HelpTOC.json";
   try {
