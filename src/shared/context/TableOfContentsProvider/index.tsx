@@ -82,8 +82,6 @@ export const TableOfContentsProvider = ({
     return [];
   }, [data]);
 
-  console.log(debouncedValue);
-
   // Set the initial filtered ids map
   useEffect(() => {
     if (data) {

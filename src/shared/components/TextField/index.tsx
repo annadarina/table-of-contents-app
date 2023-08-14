@@ -1,7 +1,9 @@
-import { HTMLProps } from "react";
+import React, { HTMLProps } from "react";
 import "./TextField.css";
 
-const TextField = (props: HTMLProps<HTMLInputElement>) => {
+const TextField: React.FC<HTMLProps<HTMLInputElement>> = (
+  props: HTMLProps<HTMLInputElement>,
+) => {
   return <input {...props} type="text" className="textfield" />;
 };
 

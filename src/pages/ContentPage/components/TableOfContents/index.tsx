@@ -48,6 +48,8 @@ const TableOfContents = () => {
     <nav className="nav__toc">
       <div className="nav__searchbar">
         <TextField
+          id="searchField"
+          data-testid="searchField"
           className="nav__searchbar"
           value={inputValue}
           onChange={handleOnChange}
