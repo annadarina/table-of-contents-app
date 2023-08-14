@@ -1,42 +1,48 @@
 // @ts-ignore
-import React from "react";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
 import { PageData } from "../../../../shared/interfaces/tableOfContents.ts";
 import TOCItem from "../TOCItem";
 import { useTableOfContentsContext } from "../../../../shared/context/TableOfContentsProvider";
 
 const TableOfContents = () => {
-  const { flattenedData, expandedItems } = useTableOfContentsContext();
+  const { flattenedData, expandedItems, setExpandedItems } =
+    useTableOfContentsContext();
 
-  const areParentsExpanded = useCallback(
+  const handleOnToggleExpand = useCallback(
     (item: PageData) => {
-      if (!item.parentId) {
-        return true;
-      }
+      setExpandedItems((prev) => {
+        const updMap = { ...prev };
+        const index = flattenedData.findIndex(({ id }) => item.id === id);
 
-      const parentItem = flattenedData.find(
-        (parent) => parent.id === item.parentId,
-      );
-      if (!parentItem) {
-        return true;
-      }
+        for (let i = index + 1; i < flattenedData.length; i++) {
+          const current = flattenedData[i];
+          // break if current item is a sibling of selected item
+          if (current.level <= item.level) {
+            break;
+          } else if (current.level - 1 !== item.level && !updMap[current.id]) {
+            // skip if current item is descendant of selected item (more then 1 level deep)
+            continue;
+          }
+          updMap[current.id] = !updMap[current.id];
+        }
 
-      if (!areParentsExpanded(parentItem)) {
-        return false;
-      }
-
-      return expandedItems[parentItem.id];
+        return updMap;
+      });
     },
-    [flattenedData, expandedItems],
+    [flattenedData, setExpandedItems],
   );
 
   return (
     <nav className="nav__toc">
       <ul>
         {flattenedData
-          .filter((item) => areParentsExpanded(item))
+          .filter((item) => expandedItems[item.id])
           .map((item) => (
-            <TOCItem key={item.id} item={item} />
+            <TOCItem
+              key={item.id}
+              item={item}
+              onToggleExpand={handleOnToggleExpand}
+            />
           ))}
       </ul>
     </nav>

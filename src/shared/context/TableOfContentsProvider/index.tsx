@@ -1,4 +1,10 @@
-import React, { useContext, useState, useMemo, createContext } from "react";
+import React, {
+  useContext,
+  useState,
+  useMemo,
+  createContext,
+  useEffect,
+} from "react";
 import { PageData, TOCData } from "../../interfaces/tableOfContents.ts";
 import {
   flattenData,
@@ -13,6 +19,10 @@ export interface TableOfContentsContext {
   setActivePage: React.Dispatch<React.SetStateAction<PageData | null>>;
   expandedItems: Record<PageData["id"], boolean>;
   setExpandedItems: React.Dispatch<
+    React.SetStateAction<Record<PageData["id"], boolean>>
+  >;
+  currentExpandedItems: Record<PageData["id"], boolean>;
+  setCurrentExpandedItems: React.Dispatch<
     React.SetStateAction<Record<PageData["id"], boolean>>
   >;
   descendantsIds: string[];
@@ -38,6 +48,23 @@ export const TableOfContentsProvider = ({
   const [expandedItems, setExpandedItems] = useState<
     Record<PageData["id"], boolean>
   >({});
+  const [currentExpandedItems, setCurrentExpandedItems] = useState<
+    Record<PageData["id"], boolean>
+  >({});
+
+  // Set the initial map of all visible items
+  useEffect(() => {
+    if (data) {
+      const tmp: Record<PageData["id"], boolean> = data.topLevelIds.reduce(
+        (acc: Record<PageData["id"], boolean>, val: string) => {
+          acc[val] = true;
+          return acc;
+        },
+        {},
+      );
+      setExpandedItems(tmp);
+    }
+  }, [data]);
 
   // Get flat list of the initial data
   const flattenedData = useMemo(() => {
@@ -53,7 +80,6 @@ export const TableOfContentsProvider = ({
     if (activePage) {
       return getAllDescendantsOfTopLevel(flattenedData, activePage);
     }
-
     return [];
   }, [activePage, flattenedData]);
 
@@ -63,7 +89,6 @@ export const TableOfContentsProvider = ({
     if (data && activePage && activePage.level !== 0) {
       return getHighlightedItems(flattenedData, activePage, data.topLevelIds);
     }
-
     return [];
   }, [data, activePage, flattenedData]);
 
@@ -76,6 +101,8 @@ export const TableOfContentsProvider = ({
         setActivePage,
         expandedItems,
         setExpandedItems,
+        currentExpandedItems,
+        setCurrentExpandedItems,
         descendantsIds,
         backlightIds,
       }}

@@ -7,14 +7,15 @@ import { useTableOfContentsContext } from "../../../../shared/context/TableOfCon
 
 interface Props {
   item: PageData;
+  onToggleExpand: (item: PageData) => void;
 }
 
-const TOCItem = ({ item }: Props) => {
+const TOCItem = ({ item, onToggleExpand }: Props) => {
   const {
     activePage,
     setActivePage,
-    expandedItems,
-    setExpandedItems,
+    currentExpandedItems,
+    setCurrentExpandedItems,
     descendantsIds,
     backlightIds,
   } = useTableOfContentsContext();
@@ -22,7 +23,7 @@ const TOCItem = ({ item }: Props) => {
   const hasChildren = item.pages && item.pages.length > 0;
 
   const arrowClasses = `toc-item__arrow ${
-    expandedItems[item.id] ? "toc-item__arrow--expand" : ""
+    currentExpandedItems[item.id] ? "toc-item__arrow--expand" : ""
   }`;
 
   const isActiveClass =
@@ -49,12 +50,21 @@ const TOCItem = ({ item }: Props) => {
         event.preventDefault();
       }
 
-      setExpandedItems((prevMap) => ({
-        ...prevMap,
-        [item.id]: !expandedItems[item.id],
+      setCurrentExpandedItems((prev) => ({
+        ...prev,
+        [item.id]: !currentExpandedItems[item.id],
       }));
+
+      onToggleExpand(item);
     },
-    [expandedItems, hasChildren, item, setActivePage, setExpandedItems],
+    [
+      currentExpandedItems,
+      hasChildren,
+      item,
+      setActivePage,
+      setCurrentExpandedItems,
+      onToggleExpand,
+    ],
   );
 
   return (
