@@ -17,7 +17,7 @@ const Sidebar = () => {
     return (
       <Placeholder
         status="error"
-        message="Error occured. Please try again later"
+        message={error || "Error occurred. Please try again later"}
       />
     );
   }

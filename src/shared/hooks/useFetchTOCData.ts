@@ -20,13 +20,16 @@ export const useFetchTOCData = (): FetchFetchTocDataResult => {
         const data = await fetchTableOfContentsData();
         setIsLoading(false);
         setTocData(data);
-      } catch (error: any) {
+      } catch (error) {
         // Handle the error
         console.error(
           "Error occurred while fetching table of contents data:",
           error,
         );
-        setError(error?.message as string);
+        setIsLoading(false);
+        if (error instanceof Error) {
+          setError(error?.message);
+        }
       }
     };
 
