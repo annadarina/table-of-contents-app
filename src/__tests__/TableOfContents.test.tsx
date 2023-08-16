@@ -1,6 +1,5 @@
 // @ts-ignore
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
 import { render, screen, act, fireEvent } from "@testing-library/react";
 import { TableOfContentsProvider } from "../shared/context/TableOfContentsProvider";
 import TableOfContents from "../pages/ContentPage/components/TableOfContents";
@@ -12,7 +11,6 @@ describe("TableOfContents", () => {
       <TableOfContentsProvider data={mockData}>
         <TableOfContents />
       </TableOfContentsProvider>,
-      { wrapper: BrowserRouter },
     );
   });
 
@@ -21,7 +19,6 @@ describe("TableOfContents", () => {
       <TableOfContentsProvider data={mockData}>
         <TableOfContents />
       </TableOfContentsProvider>,
-      { wrapper: BrowserRouter },
     );
 
     expect(screen.getByText("Getting started")).toBeInTheDocument();
@@ -33,7 +30,6 @@ describe("TableOfContents", () => {
       <TableOfContentsProvider data={mockData}>
         <TableOfContents />
       </TableOfContentsProvider>,
-      { wrapper: BrowserRouter },
     );
 
     act(() => {
@@ -48,7 +44,6 @@ describe("TableOfContents", () => {
       <TableOfContentsProvider data={mockData}>
         <TableOfContents />
       </TableOfContentsProvider>,
-      { wrapper: BrowserRouter },
     );
 
     act(() => {
@@ -57,7 +52,7 @@ describe("TableOfContents", () => {
 
     const link = screen.getByText("Getting started");
 
-    expect(link).toHaveClass("active");
+    expect(link).toHaveClass("toc-item__name--active");
     expect(screen.getByText("Accessibility")).toBeInTheDocument();
   });
 
@@ -66,7 +61,6 @@ describe("TableOfContents", () => {
       <TableOfContentsProvider data={mockData}>
         <TableOfContents />
       </TableOfContentsProvider>,
-      { wrapper: BrowserRouter },
     );
 
     const textField = screen.getByTestId("searchField");
@@ -85,7 +79,6 @@ describe("TableOfContents", () => {
       <TableOfContentsProvider data={mockData}>
         <TableOfContents />
       </TableOfContentsProvider>,
-      { wrapper: BrowserRouter },
     );
 
     const textField = screen.getByTestId("searchField");

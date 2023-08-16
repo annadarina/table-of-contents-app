@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { NavLink } from "react-router-dom";
 import "./TOCItem.css";
 import { PageData } from "../../../../shared/interfaces/tableOfContents.ts";
 import { ArrowDown } from "../../../../shared/icons/ArrowDown.tsx";
@@ -69,8 +68,8 @@ const TOCItem = ({ item, onToggleExpand }: Props) => {
 
   return (
     <li>
-      <NavLink
-        to={`${item.url}`}
+      <span
+        // to={`${item.url}`}
         style={{ paddingLeft: `${(item.level + 1) * 16}px` }}
         className={tocNameClasses}
         onClick={handleClick}
@@ -79,7 +78,7 @@ const TOCItem = ({ item, onToggleExpand }: Props) => {
           {hasChildren && <ArrowDown className={arrowClasses} />}
         </span>
         {item.title}
-      </NavLink>
+      </span>
     </li>
   );
 };

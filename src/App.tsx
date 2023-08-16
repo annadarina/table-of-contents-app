@@ -1,7 +1,7 @@
-import Router from "./router";
+import ContentPage from "./pages/ContentPage";
 
 function App() {
-  return <Router />;
+  return <ContentPage/>;
 }
 
 export default App;
