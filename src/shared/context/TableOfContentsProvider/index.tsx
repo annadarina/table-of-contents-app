@@ -12,7 +12,6 @@ import {
   getHighlightedItems,
 } from "../../utils";
 import { getParentsMap } from "./utils/getParentsMap.ts";
-import { useDebounce } from "../../hooks";
 
 type IDsMap = Record<PageData["id"], boolean>;
 
@@ -41,62 +40,42 @@ export const useTableOfContentsContext = (): TableOfContentsContext => {
   return useContext(TableOfContentsContext) || {};
 };
 
-export const TableOfContentsProvider = ({
-  data,
-  children,
-}: {
-  data: TOCData | null;
-  children: React.ReactElement | null;
-}) => {
+interface Props {
+  data: TOCData;
+  children: React.ReactElement;
+}
+
+export const TableOfContentsProvider = ({ data, children }: Props) => {
   const [activePage, setActivePage] = useState<PageData | null>(null);
-  const [expandedItems, setExpandedItems] = useState<IDsMap>({});
+  const [expandedItems, setExpandedItems] = useState<IDsMap>(() => {
+    return data.topLevelIds.reduce((acc: IDsMap, val: string) => {
+      acc[val] = true;
+      return acc;
+    }, {});
+  });
   const [currentExpandedItems, setCurrentExpandedItems] = useState<IDsMap>({});
   const [inputValue, setInputValue] = useState("");
   const [filteredIds, setFilteredIds] = useState<IDsMap>({});
 
-  const debouncedValue = useDebounce(inputValue);
-
   // Set the initial map of all top level ids
   const topLevelIdsMap = useMemo(() => {
-    if (data && data.topLevelIds?.length) {
-      return data.topLevelIds.reduce((acc: IDsMap, val: string) => {
-        acc[val] = true;
-        return acc;
-      }, {});
-    }
-    return {};
+    return data.topLevelIds.reduce((acc: IDsMap, val: string) => {
+      acc[val] = true;
+      return acc;
+    }, {});
   }, [data]);
-
-  // Set the initial map of all visible items (top level)
-  useEffect(() => {
-    if (data && !Object.keys(expandedItems).length) {
-      setExpandedItems(topLevelIdsMap);
-    }
-  }, [data, expandedItems, topLevelIdsMap]);
 
   // Get flat list of the initial data
-  const flattenedData = useMemo(() => {
-    if (data) {
-      return flattenData(data);
-    }
-    return [];
-  }, [data]);
+  const flattenedData = useMemo(() => flattenData(data), [data]);
 
-  // Set the initial filtered ids map
   useEffect(() => {
-    if (data) {
-      const map: IDsMap = getParentsMap(
-        flattenedData,
-        debouncedValue,
-        data.entities,
-      );
-      setFilteredIds(map);
-    }
-  }, [data, flattenedData, debouncedValue]);
+    // Set the initial filtered ids map
+    const map: IDsMap = getParentsMap(flattenedData, inputValue, data.entities);
 
-  // Update expanded items ids when search is on
-  useEffect(() => {
-    if (debouncedValue === "") {
+    setFilteredIds(map);
+
+    // Update expanded items ids when search is on
+    if (inputValue === "") {
       const updMap: IDsMap = { ...expandedItems };
 
       for (let i = 0; i < flattenedData.length; i++) {
@@ -118,13 +97,10 @@ export const TableOfContentsProvider = ({
       }
       setExpandedItems(updMap);
     } else {
-      setExpandedItems({
-        ...expandedItems,
-        ...filteredIds,
-      });
+      setExpandedItems((prevState) => ({ ...prevState, ...filteredIds }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flattenedData, debouncedValue, data]);
+  }, [flattenedData, inputValue, data]);
 
   // Expand parents when search is changed
   useEffect(() => {

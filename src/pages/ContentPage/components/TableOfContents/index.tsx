@@ -5,13 +5,13 @@ import { PageData } from "../../../../shared/interfaces/tableOfContents.ts";
 import TOCItem from "../TOCItem";
 import { useTableOfContentsContext } from "../../../../shared/context/TableOfContentsProvider";
 import TextField from "../../../../shared/components/TextField";
+import { debounce } from "../../../../shared/utils";
 
 const TableOfContents = () => {
   const {
     flattenedData,
     expandedItems,
     setExpandedItems,
-    inputValue,
     setInputValue,
     filteredIds,
   } = useTableOfContentsContext();
@@ -51,8 +51,7 @@ const TableOfContents = () => {
           id="searchField"
           data-testid="searchField"
           className="nav__searchbar"
-          value={inputValue}
-          onChange={handleOnChange}
+          onChange={debounce(handleOnChange, 400)}
         />
       </div>
       <ul className="nav__list">

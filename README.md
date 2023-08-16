@@ -8,10 +8,18 @@ Created a Table of Contents component using React, Typescript and CSS
 npm install
 ```
 
-## Start the project
+## Start the project in DEV mode
 
 ```shell
-npm run dev
+npm run start
 ```
 
-Open in browser http://127.0.0.1:5173/
+## Start the project in PREVIEW mode
+
+```shell
+npm run build
+```
+
+```shell
+npm run preview
+```
